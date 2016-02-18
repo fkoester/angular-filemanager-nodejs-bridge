@@ -1,0 +1,23 @@
+{
+  "name": "angular-filemanager-nodejs-bridge",
+  "version": "0.1.0",
+  "description": "Node.js bridge for angular-filemanager",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Fabian Köster <koesterreich@fastmail.fm>",
+  "license": "AGPL-3.0",
+  "dependencies": {
+    "bluebird": "^3.3.1",
+    "body-parser": "^1.15.0",
+    "compression": "^1.6.1",
+    "connect-timeout": "^1.7.0",
+    "cors": "^2.7.1",
+    "express": "^4.13.4",
+    "fs.extra": "^1.3.2",
+    "mime": "^1.3.4",
+    "morgan": "^1.6.1",
+    "multer": "^1.1.0"
+  }
+}
