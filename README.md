@@ -27,19 +27,23 @@ Currently the following operations are (partially) implemented:
 ## Usage
 
 1. Checkout this Git repository:
+
   ```
   git clone https://github.com/fkoester/angular-filemanager-nodejs-bridge.git
   ```
 2. Install dependencies:
+
   ```
   npm install
   ```
 3. run
+
   ```
   DATA_DIR=/tmp npm start
   ```
   *Change DATA_DIR variable to the root folder you want angular-filemanager to operate on*
 4. Configure angular-filemanager in your angular app:
+
   ```
   app.config(function (fileManagerConfigProvider) {
     var defaults = fileManagerConfigProvider.$get();
