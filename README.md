@@ -57,3 +57,8 @@ Currently the following operations are (partially) implemented:
     });
   });
   ```
+
+### Using Docker
+You can also run this server via [Docker](https://www.docker.com/) using the image [maestroalubia/angular-filemanager-nodejs-bridge](https://hub.docker.com/r/maestroalubia/angular-filemanager-nodejs-bridge/).
+
+The easiest way to get it up running is using [docker-compose](https://docs.docker.com/compose/), just run `docker-compose up` in the project root. This exports the host's `/tmp` directory. You can change this by changing the `docker-compose.yml` file.
