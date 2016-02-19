@@ -16,13 +16,15 @@ Currently the following operations are (partially) implemented:
 
 ## TODO
 
-* [Rename/Move](https://github.com/joni2back/angular-filemanager/blob/master/API.md#rename--move-url-filemanagerconfigrenameurl-method-post)
-* [Copy](https://github.com/joni2back/angular-filemanager/blob/master/API.md#copy-url-filemanagerconfigcopyurl-method-post)
-* [Edit file](https://github.com/joni2back/angular-filemanager/blob/master/API.md#edit-file-url-filemanagerconfigediturl-method-post)
-* [Get content of a file](https://github.com/joni2back/angular-filemanager/blob/master/API.md#get-content-of-a-file-url-filemanagerconfiggetcontenturl-method-post)
-* [Set permissions](https://github.com/joni2back/angular-filemanager/blob/master/API.md#set-permissions-url-filemanagerconfigpermissionsurl-method-post)
-* [Compress file](https://github.com/joni2back/angular-filemanager/blob/master/API.md#compress-file-url-filemanagerconfigcompressurl-method-post)
-* [Extract file](https://github.com/joni2back/angular-filemanager/blob/master/API.md#extract-file-url-filemanagerconfigextracturl-method-post)
+* Proper error handling
+* Missing API functions
+  * [Rename/Move](https://github.com/joni2back/angular-filemanager/blob/master/API.md#rename--move-url-filemanagerconfigrenameurl-method-post)
+  * [Copy](https://github.com/joni2back/angular-filemanager/blob/master/API.md#copy-url-filemanagerconfigcopyurl-method-post)
+  * [Edit file](https://github.com/joni2back/angular-filemanager/blob/master/API.md#edit-file-url-filemanagerconfigediturl-method-post)
+  * [Get content of a file](https://github.com/joni2back/angular-filemanager/blob/master/API.md#get-content-of-a-file-url-filemanagerconfiggetcontenturl-method-post)
+  * [Set permissions](https://github.com/joni2back/angular-filemanager/blob/master/API.md#set-permissions-url-filemanagerconfigpermissionsurl-method-post)
+  * [Compress file](https://github.com/joni2back/angular-filemanager/blob/master/API.md#compress-file-url-filemanagerconfigcompressurl-method-post)
+  * [Extract file](https://github.com/joni2back/angular-filemanager/blob/master/API.md#extract-file-url-filemanagerconfigextracturl-method-post)
 
 ## Usage
 
