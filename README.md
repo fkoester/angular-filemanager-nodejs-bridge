@@ -88,7 +88,6 @@ If you want to integrate this bridge into your own Express application you can d
 
   ```
   const pathresolver = require('angular-filemanager-nodejs-bridge').pathresolver;
-  const path = require('path');
 
   pathresolver.baseDir = function(req) {
 
