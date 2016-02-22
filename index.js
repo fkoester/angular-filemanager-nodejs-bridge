@@ -1,2 +1,4 @@
 /*jslint node: true */
-module.exports = require('./routes');
+module.exports.router = require('./routes');
+
+module.exports.pathresolver = require('./utils/pathresolver');

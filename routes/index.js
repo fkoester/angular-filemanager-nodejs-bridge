@@ -7,10 +7,11 @@ var path = require('path');
 var multer  = require('multer');
 var routes = express.Router();
 var dateformat = require('../utils/dateformat');
+var pathResolver = require('../utils/pathresolver');
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, process.env.DATA_DIR);
+    cb(null, path.join(pathResolver.baseDir(req), req.body.destination));
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
@@ -25,7 +26,7 @@ routes.post('/list', function (req, res, next) {
 
   var promise;
   var self = this;
-  var fsPath = path.join(process.env.DATA_DIR, req.body.params.path);
+  var fsPath = path.join(pathResolver.baseDir(req), req.body.params.path);
 
   promise = fs.statAsync(fsPath).then(function(stats) {
     if(!stats.isDirectory()) {
@@ -69,7 +70,7 @@ routes.post('/list', function (req, res, next) {
 routes.get('/download', function (req, res, next) {
   console.log(req.query.path);
 
-  var filePath = path.join(process.env.DATA_DIR, req.query.path);
+  var filePath = path.join(pathResolver.baseDir(req), req.query.path);
   var fileName = path.basename(filePath);
 
   console.log('filePath: ' + filePath);
@@ -106,7 +107,7 @@ routes.post('/upload', upload.any(), function (req, res, next) {
 
 routes.post('/remove', upload.any(), function (req, res, next) {
 
-  var filePath = path.join(process.env.DATA_DIR, req.body.params.path);
+  var filePath = path.join(pathResolver.baseDir(req), req.body.params.path);
   var promise = fs.unlinkAsync(filePath);
 
   promise = promise.then(function() {
@@ -124,7 +125,7 @@ routes.post('/remove', upload.any(), function (req, res, next) {
 
 routes.post('/createFolder', upload.any(), function (req, res, next) {
 
-  var folderPath = path.join(process.env.DATA_DIR, req.body.params.path, req.body.params.name);
+  var folderPath = path.join(pathResolver.baseDir(req), req.body.params.path, req.body.params.name);
   console.log(folderPath);
   var promise = fs.mkdirAsync(folderPath, 0o777);
 
