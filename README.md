@@ -26,7 +26,7 @@ Currently the following operations are (partially) implemented:
   * [Compress file](https://github.com/joni2back/angular-filemanager/blob/master/API.md#compress-file-url-filemanagerconfigcompressurl-method-post)
   * [Extract file](https://github.com/joni2back/angular-filemanager/blob/master/API.md#extract-file-url-filemanagerconfigextracturl-method-post)
 
-## Usage
+## Usage (standalone)
 
 1. Checkout this Git repository:
 
@@ -64,3 +64,38 @@ Currently the following operations are (partially) implemented:
 You can also run this server via [Docker](https://www.docker.com/) using the image [maestroalubia/angular-filemanager-nodejs-bridge](https://hub.docker.com/r/maestroalubia/angular-filemanager-nodejs-bridge/).
 
 The easiest way to get it up running is using [docker-compose](https://docs.docker.com/compose/), just run `docker-compose up` in the project root. This exports the host's `/tmp` directory. You can change this by changing the `docker-compose.yml` file.
+
+## Usage (in other express application)
+
+If you want to integrate this bridge into your own Express application you can do so by adding it as a dependency:
+
+1. Install via npm
+
+   ```
+   npm install --save angular-filemanager-nodejs-bridge
+   ```
+
+2. Import and configure the router
+
+   ```
+   const express = require('express');
+   const filesRouter = require('angular-filemanager-nodejs-bridge').router;
+   const routes = express.Router();
+
+   routes.use('/files', filesRouter);
+   ```
+3. Configure a custom base dir function (optional)
+
+  ```
+  const pathresolver = require('angular-filemanager-nodejs-bridge').pathresolver;
+  const path = require('path');
+
+  pathresolver.baseDir = function(req) {
+
+    if(req.body.username = 'foo') {
+      return '/foo';
+    }
+
+    return '/bar';
+  };
+  ```
