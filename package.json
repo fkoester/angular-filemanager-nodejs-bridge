@@ -1,6 +1,6 @@
 {
   "name": "angular-filemanager-nodejs-bridge",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Node.js bridge for angular-filemanager",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
