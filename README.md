@@ -56,7 +56,9 @@ Currently the following operations are (partially) implemented:
       downloadFileUrl: 'http://localhost:5000/download',
       uploadUrl: 'http://localhost:5000/upload',
       removeUrl: 'http://localhost:5000/remove',
-      createFolderUrl: 'http://localhost:5000/createFolder'
+      createFolderUrl: 'http://localhost:5000/createFolder',
+      renameUrl: 'http://localhost:5000/rename',
+      copyUrl: 'http://localhost:5000/copy'
     });
   });
   ```
