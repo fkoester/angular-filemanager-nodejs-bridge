@@ -9,6 +9,8 @@ This project provides a backend for the fantastic [angular-filemanager](https://
 Currently the following operations are (partially) implemented:
 
 * [Listing](https://github.com/joni2back/angular-filemanager/blob/master/API.md#listing-url-filemanagerconfiglisturl-method-post)
+* [Rename/Move](https://github.com/joni2back/angular-filemanager/blob/master/API.md#rename--move-url-filemanagerconfigrenameurl-method-post)
+* [Copy](https://github.com/joni2back/angular-filemanager/blob/master/API.md#copy-url-filemanagerconfigcopyurl-method-post)
 * [Remove](https://github.com/joni2back/angular-filemanager/blob/master/API.md#remove-url-filemanagerconfigremoveurl-method-post)
 * [Create folder](https://github.com/joni2back/angular-filemanager/blob/master/API.md#create-folder-url-filemanagerconfigcreatefolderurl-method-post)
 * [Upload file](https://github.com/joni2back/angular-filemanager/blob/master/API.md#upload-file-url-filemanagerconfiguploadurl-method-post-content-type-multipartform-data)
@@ -18,13 +20,12 @@ Currently the following operations are (partially) implemented:
 
 * Proper error handling
 * Missing API functions
-  * [Rename/Move](https://github.com/joni2back/angular-filemanager/blob/master/API.md#rename--move-url-filemanagerconfigrenameurl-method-post)
-  * [Copy](https://github.com/joni2back/angular-filemanager/blob/master/API.md#copy-url-filemanagerconfigcopyurl-method-post)
   * [Edit file](https://github.com/joni2back/angular-filemanager/blob/master/API.md#edit-file-url-filemanagerconfigediturl-method-post)
   * [Get content of a file](https://github.com/joni2back/angular-filemanager/blob/master/API.md#get-content-of-a-file-url-filemanagerconfiggetcontenturl-method-post)
   * [Set permissions](https://github.com/joni2back/angular-filemanager/blob/master/API.md#set-permissions-url-filemanagerconfigpermissionsurl-method-post)
   * [Compress file](https://github.com/joni2back/angular-filemanager/blob/master/API.md#compress-file-url-filemanagerconfigcompressurl-method-post)
   * [Extract file](https://github.com/joni2back/angular-filemanager/blob/master/API.md#extract-file-url-filemanagerconfigextracturl-method-post)
+* Implement new API for [click-changes branch of angular-filemanager](https://github.com/joni2back/angular-filemanager/tree/click-changes).
 
 ## Usage (standalone)
 

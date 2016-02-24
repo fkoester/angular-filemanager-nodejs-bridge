@@ -22,8 +22,6 @@ var upload = multer({ storage: storage });
 
 routes.post('/list', function (req, res, next) {
 
-  console.log(req.body);
-
   var promise;
   var self = this;
   var fsPath = path.join(pathResolver.baseDir(req), req.body.params.path);
@@ -68,7 +66,6 @@ routes.post('/list', function (req, res, next) {
 });
 
 routes.get('/download', function (req, res, next) {
-  console.log(req.query.path);
 
   var filePath = path.join(pathResolver.baseDir(req), req.query.path);
   var fileName = path.basename(filePath);
@@ -128,6 +125,46 @@ routes.post('/createFolder', upload.any(), function (req, res, next) {
   var folderPath = path.join(pathResolver.baseDir(req), req.body.params.path, req.body.params.name);
   console.log(folderPath);
   var promise = fs.mkdirAsync(folderPath, 0o777);
+
+  promise = promise.then(function() {
+    res.status(200);
+    res.send({
+      "result": {
+        "success": true,
+        "error": null
+      }
+    });
+  });
+
+  return promise;
+});
+
+routes.post('/rename', function (req, res, next) {
+
+  var oldPath = path.join(pathResolver.baseDir(req), req.body.params.path);
+  var newPath = path.join(pathResolver.baseDir(req), req.body.params.newPath);
+
+  var promise = fs.renameAsync(oldPath, newPath);
+
+  promise = promise.then(function() {
+    res.status(200);
+    res.send({
+      "result": {
+        "success": true,
+        "error": null
+      }
+    });
+  });
+
+  return promise;
+});
+
+routes.post('/copy', function (req, res, next) {
+
+  var oldPath = path.join(pathResolver.baseDir(req), req.body.params.path);
+  var newPath = path.join(pathResolver.baseDir(req), req.body.params.newPath);
+
+  var promise = fs.copyAsync(oldPath, newPath);
 
   promise = promise.then(function() {
     res.status(200);
