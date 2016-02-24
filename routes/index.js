@@ -62,6 +62,16 @@ routes.post('/list', function (req, res, next) {
     });
   });
 
+  promise = promise.catch(function(err) {
+    res.status(500);
+    res.send({
+      "result": {
+        "success": false,
+        "error": err
+      }
+    });
+  });
+
   return promise;
 });
 
@@ -69,11 +79,11 @@ routes.get('/download', function (req, res, next) {
 
   var filePath = path.join(pathResolver.baseDir(req), req.query.path);
   var fileName = path.basename(filePath);
+  var promise;
 
-  console.log('filePath: ' + filePath);
-  console.log('fileName: ' + fileName);
+  promise = fs.statAsync(filePath);
 
-  fs.statAsync(filePath).then(function(stat) {
+  promise = promise.then(function(stat) {
 
     if(!stat.isFile()) {
       throw new Error("Cannot access file " + filePath + " (or is no file)");
@@ -87,12 +97,23 @@ routes.get('/download', function (req, res, next) {
 
     var filestream = fs.createReadStream(filePath);
     filestream.pipe(res);
-
   });
+
+  promise = promise.catch(function(err) {
+    res.status(500);
+    res.send({
+      "result": {
+        "success": false,
+        "error": err
+      }
+    });
+  });
+
+  return promise;
 });
 
 routes.post('/upload', upload.any(), function (req, res, next) {
-  console.log(req.files);
+
   res.status(200);
   res.send({
     "result": {
@@ -117,6 +138,16 @@ routes.post('/remove', upload.any(), function (req, res, next) {
     });
   });
 
+  promise = promise.catch(function(err) {
+    res.status(500);
+    res.send({
+      "result": {
+        "success": false,
+        "error": err
+      }
+    });
+  });
+
   return promise;
 });
 
@@ -132,6 +163,16 @@ routes.post('/createFolder', upload.any(), function (req, res, next) {
       "result": {
         "success": true,
         "error": null
+      }
+    });
+  });
+
+  promise = promise.catch(function(err) {
+    res.status(500);
+    res.send({
+      "result": {
+        "success": false,
+        "error": err
       }
     });
   });
@@ -156,6 +197,16 @@ routes.post('/rename', function (req, res, next) {
     });
   });
 
+  promise = promise.catch(function(err) {
+    res.status(500);
+    res.send({
+      "result": {
+        "success": false,
+        "error": err
+      }
+    });
+  });
+
   return promise;
 });
 
@@ -172,6 +223,16 @@ routes.post('/copy', function (req, res, next) {
       "result": {
         "success": true,
         "error": null
+      }
+    });
+  });
+
+  promise = promise.catch(function(err) {
+    res.status(500);
+    res.send({
+      "result": {
+        "success": false,
+        "error": err
       }
     });
   });
