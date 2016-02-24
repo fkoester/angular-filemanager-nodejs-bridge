@@ -19,6 +19,7 @@ Currently the following operations are (partially) implemented:
 ## TODO
 
 * Proper error handling
+* Security: Ensure users cannot access paths they are not allowed to access (e.g. passing "../../" as path)
 * Missing API functions
   * [Edit file](https://github.com/joni2back/angular-filemanager/blob/master/API.md#edit-file-url-filemanagerconfigediturl-method-post)
   * [Get content of a file](https://github.com/joni2back/angular-filemanager/blob/master/API.md#get-content-of-a-file-url-filemanagerconfiggetcontenturl-method-post)
