@@ -47,7 +47,7 @@ routes.post('/list', function (req, res, next) {
         return {
           name: fileName,
           // rights: "Not Implemented", // TODO
-          rights: stat.mode,
+          rights: "drwxr-xr-x",
           size: stat.size,
           date: dateformat.dateToString(stat.mtime),
           type: stat.isDirectory() ? 'dir' : 'file',
