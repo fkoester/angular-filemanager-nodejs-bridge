@@ -11,7 +11,7 @@ var pathResolver = require('../utils/pathresolver');
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(pathResolver.baseDir(req), req.body.destination));
+    cb(null, path.join(pathResolver.baseDir(req), pathResolver.pathGuard(req.body.destination)));
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
@@ -24,7 +24,7 @@ routes.post('/list', function (req, res, next) {
 
   var promise;
   var self = this;
-  var fsPath = path.join(pathResolver.baseDir(req), req.body.path);
+  var fsPath = path.join(pathResolver.baseDir(req), pathResolver.pathGuard(req.body.path));
 
   promise = fs.statAsync(fsPath).then(function(stats) {
     if(!stats.isDirectory()) {
@@ -40,13 +40,14 @@ routes.post('/list', function (req, res, next) {
 
     return Promise.map(fileNames, function(fileName) {
 
-      var filePath = path.join(fsPath, fileName);
+      var filePath = path.join(fsPath, pathResolver.pathGuard(fileName));
 
       return fs.statAsync(filePath).then(function(stat) {
 
         return {
           name: fileName,
-          rights: "drwxr-xr-x", // TODO
+          // rights: "Not Implemented", // TODO
+          rights: stat.mode,
           size: stat.size,
           date: dateformat.dateToString(stat.mtime),
           type: stat.isDirectory() ? 'dir' : 'file',
@@ -77,23 +78,23 @@ routes.post('/list', function (req, res, next) {
 
 routes.get('/download', function (req, res, next) {
 
-  var filePath = path.join(pathResolver.baseDir(req), decodeURIComponent(req.query.path));
+  var filePath = path.join(pathResolver.baseDir(req), pathResolver.pathGuard(req.query.path));
   var fileName = path.basename(filePath);
   var promise;
-  console.log('filepath',filePath);
+  //console.log('filepath',filePath);
   promise = fs.statAsync(filePath);
 
   promise = promise.then(function(stat) {
 
     if(!stat.isFile()) {
-      console.log("Cannot access file " + filePath + " (or is no file)");
+      //console.log("Cannot access file " + filePath + " (or is no file)");
       throw new Error("Cannot access file " + filePath + " (or is no file)");
     }
 
     var mimeType = mime.lookup(filePath);
-    console.log('mimetype: ' + mimeType);
+    //console.log('mimetype: ' + mimeType);
 
-    res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
+    res.setHeader('Content-disposition', 'attachment; filename=' + encodeURIComponent(fileName));
     res.setHeader('Content-type', mimeType);
 
     var filestream = fs.createReadStream(filePath);
@@ -127,7 +128,7 @@ routes.post('/upload', upload.any(), function (req, res, next) {
 
 routes.post('/remove', upload.any(), function (req, res, next) {
 
-  var filePath = path.join(pathResolver.baseDir(req), req.body.path);
+  var filePath = path.join(pathResolver.baseDir(req), pathResolver.pathGuard(req.body.path));
   var promise = fs.unlinkAsync(filePath);
 
   promise = promise.then(function() {
@@ -155,8 +156,8 @@ routes.post('/remove', upload.any(), function (req, res, next) {
 
 routes.post('/createFolder', upload.any(), function (req, res, next) {
 
-  var folderPath = path.join(pathResolver.baseDir(req), req.body.path, req.body.name);
-  console.log(folderPath);
+  var folderPath = path.join(pathResolver.baseDir(req), pathResolver.pathGuard(req.body.path, req.body.name));
+  //console.log(folderPath);
   var promise = fs.mkdirAsync(folderPath, 0o777);
 
   promise = promise.then(function() {
@@ -184,8 +185,8 @@ routes.post('/createFolder', upload.any(), function (req, res, next) {
 
 routes.post('/rename', function (req, res, next) {
 
-  var oldPath = path.join(pathResolver.baseDir(req), req.body.path);
-  var newPath = path.join(pathResolver.baseDir(req), req.body.newPath);
+  var oldPath = path.join(pathResolver.baseDir(req), pathResolver.pathGuard(req.body.path));
+  var newPath = path.join(pathResolver.baseDir(req), pathResolver.pathGuard(req.body.newPath));
 
   var promise = fs.renameAsync(oldPath, newPath);
 
@@ -214,8 +215,8 @@ routes.post('/rename', function (req, res, next) {
 
 routes.post('/copy', function (req, res, next) {
 
-  var oldPath = path.join(pathResolver.baseDir(req), req.body.path);
-  var newPath = path.join(pathResolver.baseDir(req), req.body.newPath);
+  var oldPath = path.join(pathResolver.baseDir(req), pathResolver.pathGuard(req.body.path));
+  var newPath = path.join(pathResolver.baseDir(req), pathResolver.pathGuard(req.body.newPath));
 
   var promise = fs.copyAsync(oldPath, newPath);
 
@@ -244,11 +245,11 @@ routes.post('/copy', function (req, res, next) {
 
 routes.post('/getContent', function (req, res, next) {
   res.status(200);
-  var filePath = path.join(pathResolver.baseDir(req), req.body.item);
+  var filePath = path.join(pathResolver.baseDir(req), pathResolver.pathGuard(req.body.item));
   var promise = fs.readFileAsync(filePath,'utf8');
-  console.log(req);
+  //console.log(req);
   promise = promise.then(function (resolve){
-    console.log(resolve);
+    //console.log(resolve);
     res.status(200);
     res.send({
       "result": resolve
@@ -269,7 +270,7 @@ routes.post('/getContent', function (req, res, next) {
 });
 
 routes.post('/edit', function (req, res, next) {
-  var filePath = path.join(pathResolver.baseDir(req), req.body.item);
+  var filePath = path.join(pathResolver.baseDir(req), pathResolver.pathGuard(req.body.item));
 
   var promise;
 
