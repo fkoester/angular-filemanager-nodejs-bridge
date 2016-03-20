@@ -24,7 +24,7 @@ routes.post('/list', function (req, res, next) {
 
   var promise;
   var self = this;
-  var fsPath = path.join(pathResolver.baseDir(req), req.body.params.path);
+  var fsPath = path.join(pathResolver.baseDir(req), req.body.path);
 
   promise = fs.statAsync(fsPath).then(function(stats) {
     if(!stats.isDirectory()) {
@@ -77,15 +77,16 @@ routes.post('/list', function (req, res, next) {
 
 routes.get('/download', function (req, res, next) {
 
-  var filePath = path.join(pathResolver.baseDir(req), req.query.path);
+  var filePath = path.join(pathResolver.baseDir(req), decodeURIComponent(req.query.path));
   var fileName = path.basename(filePath);
   var promise;
-
+  console.log('filepath',filePath);
   promise = fs.statAsync(filePath);
 
   promise = promise.then(function(stat) {
 
     if(!stat.isFile()) {
+      console.log("Cannot access file " + filePath + " (or is no file)");
       throw new Error("Cannot access file " + filePath + " (or is no file)");
     }
 
@@ -99,12 +100,13 @@ routes.get('/download', function (req, res, next) {
     filestream.pipe(res);
   });
 
-  promise = promise.catch(function(err) {
+  promise = promise.catch(function(err,stats) {
     res.status(500);
     res.send({
       "result": {
         "success": false,
-        "error": err
+        "error": JSON.stringify(err),
+        "stats": stats
       }
     });
   });
@@ -125,7 +127,7 @@ routes.post('/upload', upload.any(), function (req, res, next) {
 
 routes.post('/remove', upload.any(), function (req, res, next) {
 
-  var filePath = path.join(pathResolver.baseDir(req), req.body.params.path);
+  var filePath = path.join(pathResolver.baseDir(req), req.body.path);
   var promise = fs.unlinkAsync(filePath);
 
   promise = promise.then(function() {
@@ -153,7 +155,7 @@ routes.post('/remove', upload.any(), function (req, res, next) {
 
 routes.post('/createFolder', upload.any(), function (req, res, next) {
 
-  var folderPath = path.join(pathResolver.baseDir(req), req.body.params.path, req.body.params.name);
+  var folderPath = path.join(pathResolver.baseDir(req), req.body.path, req.body.name);
   console.log(folderPath);
   var promise = fs.mkdirAsync(folderPath, 0o777);
 
@@ -182,8 +184,8 @@ routes.post('/createFolder', upload.any(), function (req, res, next) {
 
 routes.post('/rename', function (req, res, next) {
 
-  var oldPath = path.join(pathResolver.baseDir(req), req.body.params.path);
-  var newPath = path.join(pathResolver.baseDir(req), req.body.params.newPath);
+  var oldPath = path.join(pathResolver.baseDir(req), req.body.path);
+  var newPath = path.join(pathResolver.baseDir(req), req.body.newPath);
 
   var promise = fs.renameAsync(oldPath, newPath);
 
@@ -212,8 +214,8 @@ routes.post('/rename', function (req, res, next) {
 
 routes.post('/copy', function (req, res, next) {
 
-  var oldPath = path.join(pathResolver.baseDir(req), req.body.params.path);
-  var newPath = path.join(pathResolver.baseDir(req), req.body.params.newPath);
+  var oldPath = path.join(pathResolver.baseDir(req), req.body.path);
+  var newPath = path.join(pathResolver.baseDir(req), req.body.newPath);
 
   var promise = fs.copyAsync(oldPath, newPath);
 
@@ -240,4 +242,67 @@ routes.post('/copy', function (req, res, next) {
   return promise;
 });
 
+routes.post('/getContent', function (req, res, next) {
+  res.status(200);
+  var filePath = path.join(pathResolver.baseDir(req), req.body.item);
+  var promise = fs.readFileAsync(filePath,'utf8');
+  console.log(req);
+  promise = promise.then(function (resolve){
+    console.log(resolve);
+    res.status(200);
+    res.send({
+      "result": resolve
+    });
+  });
+
+  promise=promise.catch(function (err){
+    res.status(500);
+    res.send({
+      "result": {
+        "success": false,
+        "error": err
+      }
+    });
+  });
+
+  return promise;
+});
+
+routes.post('/edit', function (req, res, next) {
+  var filePath = path.join(pathResolver.baseDir(req), req.body.item);
+
+  var promise;
+
+  if (req.body.content){
+    promise = fs.writeFileAsync(filePath, req.content , 'utf8');
+  } else {
+    res.status(400);
+    return res.send({
+      "result":{
+        "success":"false",
+        "error": "bad request",
+      }
+    });
+  }
+
+  promise = promise.then(function (resolve){
+    res.status(200);
+    res.send({
+      "result":{
+        "success": true,
+        "error": null
+      }
+    });
+  });
+
+  promise = promise.catch(function (err){
+    res.status(500);
+    res.send({
+      "result": {
+        "success": false,
+        "error": err
+      }
+    });
+  });
+});
 module.exports = routes;
