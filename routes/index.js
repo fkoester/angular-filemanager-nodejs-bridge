@@ -128,30 +128,55 @@ routes.post('/upload', upload.any(), function (req, res, next) {
 
 routes.post('/remove', upload.any(), function (req, res, next) {
 
-  var filePath = path.join(pathResolver.baseDir(req), pathResolver.pathGuard(req.body.path));
-  var promise = fs.unlinkAsync(filePath);
+  var filePaths = req.body.items.map(function(filePath){
+    return path.join(pathResolver.baseDir(req), pathResolver.pathGuard(filePath));
+  });
 
-  promise = promise.then(function() {
-    res.status(200);
-    res.send({
-      "result": {
-        "success": true,
-        "error": null
+  var i = filePaths.length;
+  filePaths.forEach(function (path){
+    fs.unlink(path,function (err){
+      i -= 1;
+      if (err){
+        res.status(500);
+        res.send({
+          "result": {
+            "success": false,
+            "error": err
+          }
+        });
+      } else if (i === 0){
+        res.send({
+          "result": {
+            "success": true,
+            "error": null
+          }
+        });
       }
     });
   });
+  // var promise = fs.unlinkAsync(filePath);
 
-  promise = promise.catch(function(err) {
-    res.status(500);
-    res.send({
-      "result": {
-        "success": false,
-        "error": err
-      }
-    });
-  });
+  // promise = promise.then(function() {
+  //   res.status(200);
+  //   res.send({
+  //     "result": {
+  //       "success": true,
+  //       "error": null
+  //     }
+  //   });
+  // });
 
-  return promise;
+  // promise = promise.catch(function(err) {
+  //   res.status(500);
+  //   res.send({
+  //     "result": {
+  //       "success": false,
+  //       "error": err
+  //     }
+  //   });
+  // });
+
+  // return promise;
 });
 
 routes.post('/createFolder', upload.any(), function (req, res, next) {
@@ -185,8 +210,8 @@ routes.post('/createFolder', upload.any(), function (req, res, next) {
 
 routes.post('/rename', function (req, res, next) {
 
-  var oldPath = path.join(pathResolver.baseDir(req), pathResolver.pathGuard(req.body.path));
-  var newPath = path.join(pathResolver.baseDir(req), pathResolver.pathGuard(req.body.newPath));
+  var oldPath = path.join(pathResolver.baseDir(req), pathResolver.pathGuard(req.body.item));
+  var newPath = path.join(pathResolver.baseDir(req), pathResolver.pathGuard(req.body.newItemPath));
 
   var promise = fs.renameAsync(oldPath, newPath);
 
@@ -305,5 +330,62 @@ routes.post('/edit', function (req, res, next) {
       }
     });
   });
+});
+
+routes.post('/move', function (req, res, next) {
+
+  var targets = req.body.items.map(function (filePath){
+    return path.join(pathResolver.baseDir(req), pathResolver.pathGuard(filePath));
+  });
+  var newPath = path.join(pathResolver.baseDir(req), pathResolver.pathGuard(req.body.newPath));
+  console.log(newPath);
+  var i = targets.length;
+  targets.forEach(function (target){
+    fs.rename(target,path.join(newPath,path.basename(target)),function (err){
+      i -= 1;
+      if (err){
+        res.status(500);
+        res.send({
+          "result": {
+            "success": false,
+            "error": err
+          }
+        });
+      } else if (i === 0){
+        res.send({
+          "result": {
+            "success": true,
+            "error": null
+          }
+        });
+      }
+    });
+  });
+  // var oldPath = path.join(pathResolver.baseDir(req), pathResolver.pathGuard(req.body.item));
+  // var newPath = path.join(pathResolver.baseDir(req), pathResolver.pathGuard(req.body.newItemPath));
+
+  // var promise = fs.renameAsync(oldPath, newPath);
+
+  // promise = promise.then(function() {
+  //   res.status(200);
+  //   res.send({
+  //     "result": {
+  //       "success": true,
+  //       "error": null
+  //     }
+  //   });
+  // });
+
+  // promise = promise.catch(function(err) {
+  //   res.status(500);
+  //   res.send({
+  //     "result": {
+  //       "success": false,
+  //       "error": err
+  //     }
+  //   });
+  // });
+
+  // return promise;
 });
 module.exports = routes;
