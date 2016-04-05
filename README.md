@@ -7,27 +7,26 @@ This project provides a backend for the fantastic [angular-filemanager](https://
 ## Features
 
 Currently the following operations are (partially) implemented:
-
-* [Listing](https://github.com/joni2back/angular-filemanager/blob/master/API.md#listing-url-filemanagerconfiglisturl-method-post)
-* [Rename/Move](https://github.com/joni2back/angular-filemanager/blob/master/API.md#rename--move-url-filemanagerconfigrenameurl-method-post)
-* [Copy](https://github.com/joni2back/angular-filemanager/blob/master/API.md#copy-url-filemanagerconfigcopyurl-method-post)
-* [Remove](https://github.com/joni2back/angular-filemanager/blob/master/API.md#remove-url-filemanagerconfigremoveurl-method-post)
-* [Create folder](https://github.com/joni2back/angular-filemanager/blob/master/API.md#create-folder-url-filemanagerconfigcreatefolderurl-method-post)
-* [Upload file](https://github.com/joni2back/angular-filemanager/blob/master/API.md#upload-file-url-filemanagerconfiguploadurl-method-post-content-type-multipartform-data)
-* [Download/Preview](https://github.com/joni2back/angular-filemanager/blob/master/API.md#download--preview-file-url-filemanagerconfigdownloadfileurl-method-get)
-
+* Implement new API for [click-changes branch of angular-filemanager](https://github.com/joni2back/angular-filemanager/tree/click-changes).
+* [Copy](https://github.com/joni2back/angular-filemanager/blob/click-changes/API.md#copy-url-filemanagerconfigcopyurl-method-post)
+* [Create folder](https://github.com/joni2back/angular-filemanager/blob/click-changes/API.md#create-folder-url-filemanagerconfigcreatefolderurl-method-post)
+* [Download/Preview](https://github.com/joni2back/angular-filemanager/blob/click-changes/API.md#download--preview-file-url-filemanagerconfigdownloadfileurl-method-get)
+* [Edit file](https://github.com/joni2back/angular-filemanager/blob/click-changes/API.md#edit-file-url-filemanagerconfigediturl-method-post)
+* [Get content of a file](https://github.com/joni2back/angular-filemanager/blob/click-changes/API.md#get-content-of-a-file-url-filemanagerconfiggetcontenturl-method-post)
+* [Listing](https://github.com/joni2back/angular-filemanager/blob/click-changes/API.md#listing-url-filemanagerconfiglisturl-method-post)
+* [Remove](https://github.com/joni2back/angular-filemanager/blob/click-changes/API.md#remove-url-filemanagerconfigremoveurl-method-post)
+* [Rename/Move](https://github.com/joni2back/angular-filemanager/blob/click-changes/API.md#rename--move-url-filemanagerconfigrenameurl-method-post)
+* [Upload file](https://github.com/joni2back/angular-filemanager/blob/click-changes/API.md#upload-file-url-filemanagerconfiguploadurl-method-post-content-type-multipartform-data)
+* Security: Ensure users cannot access paths they are not allowed to access (e.g. passing "../../" as path)
 ## TODO
 
 * Proper error handling
-* Security: Ensure users cannot access paths they are not allowed to access (e.g. passing "../../" as path)
 * Missing API functions
   * Return correct file permissions
-  * [Edit file](https://github.com/joni2back/angular-filemanager/blob/master/API.md#edit-file-url-filemanagerconfigediturl-method-post)
-  * [Get content of a file](https://github.com/joni2back/angular-filemanager/blob/master/API.md#get-content-of-a-file-url-filemanagerconfiggetcontenturl-method-post)
-  * [Set permissions](https://github.com/joni2back/angular-filemanager/blob/master/API.md#set-permissions-url-filemanagerconfigpermissionsurl-method-post)
-  * [Compress file](https://github.com/joni2back/angular-filemanager/blob/master/API.md#compress-file-url-filemanagerconfigcompressurl-method-post)
-  * [Extract file](https://github.com/joni2back/angular-filemanager/blob/master/API.md#extract-file-url-filemanagerconfigextracturl-method-post)
-* Implement new API for [click-changes branch of angular-filemanager](https://github.com/joni2back/angular-filemanager/tree/click-changes).
+  * [Compress file](https://github.com/joni2back/angular-filemanager/blob/click-changes/API.md#compress-file-url-filemanagerconfigcompressurl-method-post)
+  * [Extract file](https://github.com/joni2back/angular-filemanager/blob/click-changes/API.md#extract-file-url-filemanagerconfigextracturl-method-post)
+  * [Set permissions](https://github.com/joni2back/angular-filemanager/blob/click-changes/API.md#set-permissions-url-filemanagerconfigpermissionsurl-method-post)
+
 
 ## Usage (standalone)
 
@@ -54,13 +53,15 @@ Currently the following operations are (partially) implemented:
     var defaults = fileManagerConfigProvider.$get();
 
     fileManagerConfigProvider.set({
-      listUrl: 'http://localhost:5000/list',
-      downloadFileUrl: 'http://localhost:5000/download',
-      uploadUrl: 'http://localhost:5000/upload',
-      removeUrl: 'http://localhost:5000/remove',
-      createFolderUrl: 'http://localhost:5000/createFolder',
-      renameUrl: 'http://localhost:5000/rename',
-      copyUrl: 'http://localhost:5000/copy'
+      copyUrl: '{/files}/copy', // where {/files} is the mount path of this module.
+      createFolderUrl: '{/files}/createFolder',
+      downloadFileUrl: '{/files}/download',
+      editUrl: '{/files}/edit',
+      removeUrl: '{/files}/remove',
+      renameUrl: '{/files}/rename',
+      uploadUrl: '{/files}/upload',
+      getContentUrl: '{/files}/getContent',
+      listUrl: '{/files}/list',
     });
   });
   ```
