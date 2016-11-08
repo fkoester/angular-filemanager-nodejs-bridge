@@ -2,7 +2,8 @@
 
 This project provides a backend for the fantastic [angular-filemanager](https://github.com/joni2back/angular-filemanager/) UI written with [Node.js](https://nodejs.org/) and [Express](http://expressjs.com/).
 
-**CAUTION: This project is a work in progress!**
+**CAUTION: This project is currently not mainted!
+If you want to take over this project or you already developed a better implementation, please send me a message and I will link to your project.**
 
 ## Features
 
